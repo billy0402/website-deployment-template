@@ -25,6 +25,8 @@ services:
 
   backend:
     <<: *backend_defaults
+    volumes:
+      - ./backend/volumes/media:/home/web/project/media
 
   db:
     <<: *docker_defaults
