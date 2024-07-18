@@ -14,8 +14,8 @@ x-backend-defaults: &backend_defaults
   image: django-rest-project-template:latest
   env_file:
     - ./backend/.env
-  ports:
-    - 8000:8000
+  # ports:
+  #   - 8000:8000
   depends_on:
     - db
 
@@ -26,6 +26,7 @@ services:
   backend:
     <<: *backend_defaults
     volumes:
+      - ./backend/volumes/static:/home/web/project/static
       - ./backend/volumes/media:/home/web/project/media
 
   db:
@@ -37,6 +38,17 @@ services:
       - ./db/volumes/pg_data:/var/lib/postgresql/data
     ports:
       - '${DB_PORT:-5432}:5432'
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./backend/volumes/static:/static
+      - ./backend/volumes/media:/media
+    ports:
+      - 8000:80
+    depends_on:
+      - backend
 
 volumes:
   db_data:
