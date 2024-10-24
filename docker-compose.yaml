@@ -37,7 +37,7 @@ services:
     volumes:
       - ./db/volumes/pg_data:/var/lib/postgresql/data
     ports:
-      - '${DB_PORT:-5432}:5432'
+      - ${DB_PORT:-5432}:5432
 
   nginx:
     image: nginx:latest
@@ -49,6 +49,3 @@ services:
       - 8000:80
     depends_on:
       - backend
-
-volumes:
-  db_data:
